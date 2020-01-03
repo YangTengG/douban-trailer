@@ -1,0 +1,82 @@
+extends ./layouts/default
+block title
+  title 豆瓣首页
+block content
+  include ./includes/header
+
+  .container-fluid
+    .row
+      .col-12.col-md-3.col-xl-2.sidebar
+        .collapse.in.cat-links
+          .sidebar-item.active
+            a.sidebar-link(href='/') Links
+            ur.nav.sidebar-inner
+              li.sidebar-inner-active.active
+                a(href='/') Link1
+              li.sidebar-inner-active
+                a(href='/') Link2
+      .col-12.col-md-9.col-xl-9.py-md-3.pl-md-5.content
+        .row
+          .col-md-6
+            .card
+              img.card-img-top(src='https://img1.doubanio.com/view/photo/s_ratio_poster/public/p451926968.jpg', data-video='https://ugcbsy.qq.com/uwMROfz2r5zBIaQXGdGnC2dfJ7xNfFa-OUQWNxqkLPBi52XA/x0382d56qii.p712.1.mp4?vkey=605CE3F7DD42A693362E423CAAF3EEFA0497229E640067AB226A2F428F61269A4665B2A3FD79D6D4BE8C19308E280C1F6ABDB0E1747254EB67775DDA72E15A9725835E52F87CBCDB151BB15DA6298FD3D3F5ABCFB8E3DE130F485C72A8F70BB49B7B16C09802ACF2402B2471EB4819E4DD0FF563056215AE306CAFE24D536D01')
+              .card-body
+                h4.card-title 黑客帝国
+                p.card-desc 电影描述
+              .card-footer
+                small.text-muted 1 天前更新
+    #videoModal.modal.fade(tabindex='-1', role='dialog')
+      .modal-dialog.modal-lg(role='document')
+        #dplayer.modal-content
+
+
+  style.
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      list-style: none;
+    }
+    .modal-dialog {
+      font-size: 0;
+    }
+  
+  include ./includes/script
+  script.
+    var player = null;
+
+    $(document).ready(function() {
+      $('#videoModal').on('hidden.bs.modal', function(e) {
+        if (player && player.pause) player.pause();
+      });
+
+      $('.card-img-top').click(function() {
+        var videoUrl = $(this).data('video');
+        var image = $(this).attr('src');
+
+        $('#videoModal').modal('show');
+
+        if (!player) {
+          player = new DPlayer({
+            container: document.getElementById('dplayer'),
+            screenshot: true,
+            autoplay: true,
+            video: {
+                url: videoUrl,
+                pic: image,
+                thumbnails: image
+            }
+          });
+        } else {
+          if (player.video.currentSrc !== videoUrl) {
+            player.switchVideo({
+              url: videoUrl,
+              pic: image,
+              thumbnails: image
+            });
+          }
+        }
+
+      });
+    });
