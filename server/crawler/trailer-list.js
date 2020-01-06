@@ -24,7 +24,7 @@ const sleep = time => new Promise(resolve => {
   // 加载更多
   await page.waitForSelector('.more');
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     await sleep(3000);
     await page.click('.more')
   }
@@ -50,9 +50,11 @@ const sleep = time => new Promise(resolve => {
       });
     }
 
-   return links;
+    return links;
   });
 
-  console.log(result);
   await browser.close();
+  process.send({result});
+  process.exit(0);  
+
 })();
