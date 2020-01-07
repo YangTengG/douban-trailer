@@ -2,6 +2,19 @@ const Koa = require('koa');
 const path = require('path');
 const pug = require('pug');
 const views = require('koa-views');
+const mongoose = require('mongoose');
+
+const { connect, initSchemas } = require('./database/init');
+
+(async () => {
+  await connect();
+
+  initSchemas();
+
+  // require('./tasks/movie');
+
+  require('./tasks/api')
+})();
 
 const app = new Koa();
 
